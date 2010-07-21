@@ -1,0 +1,9 @@
+You'll need SDL-1.2, OpenGL and GLU to compile.
+
+Rolling the middle mouse button zooms in.
+
+Holding the middle mouse button down while moving the mouse around tilts the checker board.
+
+Holding the left mouse button down while moving the mouse in an allowed direction moves the checker piece (the piece you had your mouse on when you pressed the left mouse button down).
+
+Pressing 'f' key puts the game into fullscreen.
