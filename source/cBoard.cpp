@@ -106,8 +106,8 @@ void cBoard::possible_moves(int i, int j, int moves[4]) const	/// moves holds th
 	if( board[i][j] == 0 )
 		return;
 
-	int e = (board[i][j] == 1 || board[i][j] == 3) ? 2 : 1;
-
+	int e1 = (board[i][j] == 1 || board[i][j] == 3) ? 2 : 1;
+	int e2 = e1 + 2;
 
 	if(board[i][j] != 2)
 	{
@@ -120,7 +120,7 @@ void cBoard::possible_moves(int i, int j, int moves[4]) const	/// moves holds th
 			{
 				moves[0] = 1;
 			}
-			else if( i > 1 && j > 1 && board[i-1][j-1] == e)
+			else if( i > 1 && j > 1 && (board[i-1][j-1] == e1 || board[i-1][j-1] == e2) )
 			{
 				if(board[i-2][j-2] == 0)
 					moves[0] = 2;
@@ -136,7 +136,7 @@ void cBoard::possible_moves(int i, int j, int moves[4]) const	/// moves holds th
 			{
 				moves[1] = 1;
 			}
-			else if( i > 1 && j < 6 && board[i-1][j+1] == e)
+			else if( i > 1 && j < 6 && (board[i-1][j+1] == e1 || board[i-1][j+1] == e2) )
 			{
 				if(board[i-2][j+2] == 0)
 					moves[1] = 2;
@@ -149,14 +149,13 @@ void cBoard::possible_moves(int i, int j, int moves[4]) const	/// moves holds th
 
 		/// bottom left corner ( d = 2 )
 
-		//cout << board[i+1][j-1] << " " << e << " " << board[i][j] << " " << i << " " << j << endl;
 		if(i < 7 && j > 0)
 		{
 			if( board[i+1][j-1] == 0 )
 			{
 				moves[2] = 1;
 			}
-			else if( i < 6 && j > 1 && board[i+1][j-1] == e)
+			else if( i < 6 && j > 1 && (board[i+1][j-1] == e1 || board[i+1][j-1] == e2) )
 			{
 				if(board[i+2][j-2] == 0)
 					moves[2] = 2;
@@ -172,7 +171,7 @@ void cBoard::possible_moves(int i, int j, int moves[4]) const	/// moves holds th
 			{
 				moves[3] = 1;
 			}
-			else if( i < 6 && j < 6 && board[i+1][j+1] == e)
+			else if( i < 6 && j < 6 && (board[i+1][j+1] == e1 || board[i+1][j+1] == e2) )
 			{
 				if(board[i+2][j+2] == 0)
 					moves[3] = 2;
