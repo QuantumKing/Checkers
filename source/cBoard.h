@@ -4,6 +4,10 @@ class cBoard
 
 		int board[8][8]; /// red pieces == 1, black pieces == 2, no piece = 0.
 
+		bool first;
+
+		bool red_turn;
+
 	public:
 
 		cBoard (void);
@@ -14,7 +18,9 @@ class cBoard
 		const int at (const int i, const int j) const;
 
 		
-		void possible_moves(int i, int j, int moves[4]) const;
+		void possible_moves (int i, int j, int moves[4]) const;
+
+		void new_turn (void);
 		
 
 };

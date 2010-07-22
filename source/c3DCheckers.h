@@ -30,10 +30,6 @@ class c3DCheckers : public c3DWindow
 
 		bool mmb_down, lmb_down;
 
-		GLfloat LightAmbient[4];
-		GLfloat LightDiffuse[4];
-		GLfloat LightPosition[4];
-
 		float z, roll, pitch, heading;
 
 

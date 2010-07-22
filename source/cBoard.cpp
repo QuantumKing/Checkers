@@ -20,40 +20,28 @@ cBoard::cBoard (void) ///  board[0][0] is at the top left corner of the checker 
 				else board[i][j] = 1;
 			}
 			else board[i][j] = 0;
-
-			//cout << board[i][j] << " ";
 		}
-		//cout << endl;	
 	}
+	first = true;
+	red_turn = true;
+}
+
+
+void cBoard::new_turn (void)
+{
+	if(first) return; // If the player hasn't moved yet, then it isn't time for a new turn.
+
+	first = true;
+	red_turn = !red_turn;
 }
 
 
 void cBoard::move (int i, int j, int d, int n)
 {
-	if(n == 0) return;
+	if( n <= 0 || n > 2 ) return;
 
-	int a, b;
-
-	if( d == 0 )
-	{
-		a = -1;
-		b = -1;
-	}
-	else if( d == 1 )
-	{
-		a = 1;
-		b = -1;
-	}
-	else if( d == 2 )
-	{
-		a = -1;
-		b = 1;
-	}
-	else if( d == 3 )
-	{
-		a = 1;
-		b = 1;
-	}
+	int a = (d == 0 || d == 2 ? -1 : 1);
+	int b = (d == 0 || d == 1 ? -1 : 1);
  
 	int p1 = i+n*b, p2 = j+n*a;
 
@@ -78,17 +66,7 @@ void cBoard::move (int i, int j, int d, int n)
 		board[p1][p2] = 4;
 	}
 
-/*
-	for(int ki = 0; ki < 8; ++ki)
-	{
-		for(int kj = 0; kj < 8; ++kj)
-		{
-			cout << board[ki][kj] << " ";
-		}
-		cout << endl;	
-	}
-*/
-
+	first = false;
 }
 
 
@@ -106,17 +84,21 @@ void cBoard::possible_moves(int i, int j, int moves[4]) const	/// moves holds th
 	if( board[i][j] == 0 )
 		return;
 
-	int e1 = (board[i][j] == 1 || board[i][j] == 3) ? 2 : 1;
+	bool red = (board[i][j] == 1 || board[i][j] == 3);
+
+	if((red && !red_turn) || (!red && red_turn))		// If the piece is red and it isn't the red turn, then return. Same for black pieces.
+		return;
+
+	int e1 = red ? 2 : 1;
 	int e2 = e1 + 2;
 
 	if(board[i][j] != 2)
 	{
-
 		/// top left corner ( d = 0 )
 
 		if(i > 0 && j > 0)
 		{
-			if( board[i-1][j-1] == 0 )
+			if( board[i-1][j-1] == 0 && first )
 			{
 				moves[0] = 1;
 			}
@@ -127,12 +109,11 @@ void cBoard::possible_moves(int i, int j, int moves[4]) const	/// moves holds th
 			}
 		}
 
-
 		/// top right corner ( d = 1 )
 
 		if(i > 0 && j < 7)
 		{
-			if( board[i-1][j+1] == 0 )
+			if( board[i-1][j+1] == 0 && first )
 			{
 				moves[1] = 1;
 			}
@@ -146,12 +127,11 @@ void cBoard::possible_moves(int i, int j, int moves[4]) const	/// moves holds th
 
 	if(board[i][j] != 1)
 	{
-
 		/// bottom left corner ( d = 2 )
 
 		if(i < 7 && j > 0)
 		{
-			if( board[i+1][j-1] == 0 )
+			if( board[i+1][j-1] == 0 && first )
 			{
 				moves[2] = 1;
 			}
@@ -162,12 +142,11 @@ void cBoard::possible_moves(int i, int j, int moves[4]) const	/// moves holds th
 			}
 		}
 
-
 		/// bottom right corner ( d = 3 )
 
 		if(i < 7 && j < 7)
 		{
-			if( board[i+1][j+1] == 0 )
+			if( board[i+1][j+1] == 0 && first )
 			{
 				moves[3] = 1;
 			}

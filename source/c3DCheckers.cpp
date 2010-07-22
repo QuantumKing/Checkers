@@ -1,5 +1,9 @@
 #include "c3DCheckers.h"
 
+int round(float a)
+{
+	return int(a + 0.5f);
+}
 
 c3DCheckers::c3DCheckers(int W, int H, int ScreenFlags, int ScreenBPP) : c3DWindow(W, H, ScreenFlags | SDL_GL_DOUBLEBUFFER, ScreenBPP)
 { 
@@ -51,42 +55,6 @@ c3DCheckers::c3DCheckers(int W, int H, int ScreenFlags, int ScreenBPP) : c3DWind
 
 	mmb_down = false;
 	lmb_down = false;
-
-	/* Sets up OpenGL double buffering */
- 	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
-
-	/* Enable smooth shading */
-	glShadeModel( GL_SMOOTH );
-
-	/* Set the background black */
-	glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
-
-	/* Depth buffer setup */
-	glClearDepth( 1.0f );
-
-	/* Enables Depth Testing */
-	glEnable( GL_DEPTH_TEST );
-
-	/* The Type Of Depth Test To Do */
-	glDepthFunc( GL_LEQUAL );
-
-	/* Really Nice Perspective Calculations */
-	glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
-
-	glEnable(GL_LINE_SMOOTH);
-	glEnable(GL_BLEND);							// Enable Blending
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);			// Type Of Blending To Use
-	glEnable(GL_TEXTURE_2D);
-
-	LightAmbient[0] = 0.5f;	LightAmbient[1] = 0.5f;	LightAmbient[2] = 0.5f;	LightAmbient[3] = 1.0f;
-	LightDiffuse[0] = 1.0f;	LightDiffuse[1] = 1.0f;	LightDiffuse[2] = 1.0f;	LightDiffuse[3] = 1.0f;
-	LightPosition[0] = 0.0f; LightPosition[1] = 0.0f; LightPosition[2] = 2.0f; LightPosition[3] = 1.0f;
-
-	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);				// Setup The Ambient Light
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);				// Setup The Diffuse Light
-	glLightfv(GL_LIGHT1, GL_POSITION, LightPosition);			// Position The Light
-	glEnable(GL_LIGHT1);							// Enable Light One
-	glEnable(GL_LIGHTING);							// Enable Lighting
 }
 
 
@@ -116,8 +84,8 @@ void c3DCheckers::Update (void)
 
 void c3DCheckers::Render (void)
 {
-    	/* Clear The Screen And The Depth Buffer */
-    	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	/* Clear The Screen And The Depth Buffer */
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 	glLoadIdentity();
 
 	glTranslatef(0.0f,0.0f,z);
@@ -131,41 +99,38 @@ void c3DCheckers::Render (void)
 	for(int i = 0; i < 24; ++i)
 		pieces[i]->draw();
 
-    	SDL_GL_SwapBuffers();
-    	SDL_Delay(5);
-
+	SDL_GL_SwapBuffers();
+	SDL_Delay(5);
 }
 
 void c3DCheckers::GetInput (void)
 {
 	Vector3D v;
 
-    	while(SDL_PollEvent(&event))
-    	{
-		switch(event.type)
-		{ 
+	while(SDL_PollEvent(&event))
+	{
+	switch(event.type)
+	{ 
 
-       			case SDL_QUIT:
-            			done = true;
-	    			break;
+		case SDL_QUIT:
+			done = true;
+			break;
 
-			case SDL_KEYDOWN:
+		case SDL_KEYDOWN:
 
-				switch(event.key.keysym.sym)
-				{
+			switch(event.key.keysym.sym)
+			{
+				case SDLK_ESCAPE:
+					done = true;
+					break;
 
-					case SDLK_ESCAPE:
-						done = true;
-						break;
+				case SDLK_f:
+					toggle_fullscreen();
 
-					case SDLK_f:
-						toggle_fullscreen();
-
-					default:
-						break;
-				}		
-				break;
-
+				default:
+					break;
+			}		
+			break;
 
 			case SDL_MOUSEBUTTONDOWN:
 
@@ -179,21 +144,22 @@ void c3DCheckers::GetInput (void)
 						if(current_piece_moving)
 							break;
 
-						lmb_down = true;
-						v = GetOGLPos(event.motion.x,event.motion.y);
+							current_piece = -1;
 
-						for(int i = 0; i < 24; ++i)
-						{
-							if( pieces[i]->Vector3DIntersect(v) )
+							lmb_down = true;
+							v = GetOGLPos(event.motion.x,event.motion.y);
+
+							for(int i = 0; i < 24; ++i)
 							{
-								current_piece_i = round((v.z+1.4f)/0.4f);
-								current_piece_j = round((v.x+1.4f)/0.4f);
-								current_piece = i;
-								break;			
+								if( pieces[i]->Vector3DIntersect(v) )
+								{
+									current_piece_i = round((v.z+1.4f)/0.4f);
+									current_piece_j = round((v.x+1.4f)/0.4f);
+									current_piece = i;
+									break;			
+								}
 							}
-						}
-
-						break;
+							break;
 
 					default:
 						break;
@@ -229,9 +195,6 @@ void c3DCheckers::GetInput (void)
 						int moves[4];
 						board->possible_moves(current_piece_i,current_piece_j,moves);
 
-						//std::cout << moves[0] << " " << moves[1] << " " << moves[2] << " " << moves[3] << " " << std::endl;
-						//std::cout << current_piece_i << " " << current_piece_j << std::endl;
-
 						if( dx < 0.0f && dz < 0.0f ) 
 						{
 							current_piece_moving_direction = 0;
@@ -253,6 +216,8 @@ void c3DCheckers::GetInput (void)
 							current_piece_moving_steps = moves[3];
 						}
 
+						board->move(current_piece_i,current_piece_j,current_piece_moving_direction,current_piece_moving_steps); // update the cBoard board.
+
 						current_piece_moving = true;
 					}
 				}
@@ -270,6 +235,7 @@ void c3DCheckers::GetInput (void)
 
 					case SDL_BUTTON_LEFT:
 						lmb_down = false;
+						board->new_turn();
 						break;
 
 					case SDL_BUTTON_WHEELUP:
@@ -288,42 +254,22 @@ void c3DCheckers::GetInput (void)
 			case SDL_VIDEORESIZE:
 
 				resize( event.resize.w, event.resize.h );
-
 				break;
 
 			default:
 		     		break;
 		}
-
-    	}
+	}
 }
 
 
 void c3DCheckers::move_piece (int i, int j, int d, int n)
 {
-	int a, b;
+	if( d < 0 || d > 3 )
+		return;
 
-	if( d == 0 )
-	{
-		a = -1;
-		b = -1;
-	}
-	else if( d == 1 )
-	{
-		a = 1;
-		b = -1;
-	}
-	else if( d == 2 )
-	{
-		a = -1;
-		b = 1;
-	}
-	else if( d == 3 )
-	{
-		a = 1;
-		b = 1;
-	}
-	else return;
+	int a = (d == 0 || d == 2 ? -1 : 1);
+	int b = (d == 0 || d == 1 ? -1 : 1);
 
 
 	if( n == 1 || n == 2 )
@@ -368,8 +314,6 @@ void c3DCheckers::move_piece (int i, int j, int d, int n)
 					}
 				}
 			}
-
-			board->move(current_piece_i,current_piece_j,current_piece_moving_direction,current_piece_moving_steps); // update the cBoard board.
 
 			current_piece_moving = false;
 			current_piece_i += n*b;

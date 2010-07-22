@@ -2,7 +2,7 @@
 #define DEFS_H
 
 #include <SDL/SDL.h>
-#include <GL/gl.h>
+#include <SDL/SDL_opengl.h>
 #include <GL/glu.h>
 
 #include <iostream>
@@ -20,6 +20,7 @@ struct Texture			// Holds texture data.
 
 Texture Load2DTexture(const char* filename);		// Function to load a texture from a bitmap.
 
+int round(float a);			//Function to round a number.
 
 class Rect		// A 2D bounding box.
 {
@@ -86,6 +87,7 @@ namespace glLists		// Definitions for gl lists.
 	extern GLuint checker_piece_rest;
 	extern GLuint checker_piece_top;
 
+	void LoadAllTextures (void);
 	void BuildLists (void);
 };
 

@@ -9,162 +9,167 @@ namespace glLists
 	GLuint checker_piece_rest;
 	GLuint checker_piece_top;
 
-void BuildLists (void)
-{
-	Texture t;
+	void LoadAllTextures (void)
+	{
+		Texture t;
 
-	t = Load2DTexture("pics/checkers_sides.bmp");
-	textures[0] = t.t;
+		t = Load2DTexture("pics/checkers_sides.bmp");
+		textures[0] = t.t;
 
-	t = Load2DTexture("pics/checker_board.bmp");
-	textures[1] = t.t;
+		t = Load2DTexture("pics/checker_board.bmp");
+		textures[1] = t.t;
 
-	t = Load2DTexture("pics/red_checker.bmp");
-	textures[2] = t.t;
+		t = Load2DTexture("pics/red_checker.bmp");
+		textures[2] = t.t;
 
-	t = Load2DTexture("pics/black_checker.bmp");
-	textures[3] = t.t;
+		t = Load2DTexture("pics/black_checker.bmp");
+		textures[3] = t.t;
 
-	t = Load2DTexture("pics/king_red.bmp");
-	textures[4] = t.t;
+		t = Load2DTexture("pics/king_red.bmp");
+		textures[4] = t.t;
 
-	t = Load2DTexture("pics/king_black.bmp");
-	textures[5] = t.t;
+		t = Load2DTexture("pics/king_black.bmp");
+		textures[5] = t.t;
+	}
+
+	void BuildLists (void)
+	{
+				
+		LoadAllTextures();
+
+		checker_board_rest = glGenLists(3); 			// Building three lists.
 
 
-	checker_board_rest = glGenLists(3); 			// Building three lists.
+		glNewList(checker_board_rest,GL_COMPILE);			// New Compiled 3d_checker_board Display List
 
+			glBegin(GL_QUAD_STRIP);
 
-	glNewList(checker_board_rest,GL_COMPILE);			// New Compiled 3d_checker_board Display List
+				// Front Face
+				glNormal3f( 0.0f, 0.0f, 1.0f);
+				glTexCoord2f(0.0f, 0.0f); glVertex3f(-2.0f, -0.2f,  2.0f);
+				glTexCoord2f(0.0f, 0.25f); glVertex3f(-2.0f,  0.3f,  2.0f);
 
-		glBegin(GL_QUAD_STRIP);
+				glTexCoord2f(0.25f, 0.0f); glVertex3f( 2.0f, -0.2f,  2.0f);
+				glTexCoord2f(0.25f, 0.25f); glVertex3f( 2.0f,  0.3f,  2.0f);
 
-			// Front Face
-			glNormal3f( 0.0f, 0.0f, 1.0f);
-			glTexCoord2f(0.0f, 0.0f); glVertex3f(-2.0f, -0.2f,  2.0f);
-			glTexCoord2f(0.0f, 0.25f); glVertex3f(-2.0f,  0.3f,  2.0f);
+				// Right face
+				glNormal3f( 1.0f, 0.0f, 0.0f);
+				glTexCoord2f(0.5f, 0.0f); glVertex3f( 2.0f, -0.2f, -2.0f);
+				glTexCoord2f(0.5f, 0.25f); glVertex3f( 2.0f,  0.3f, -2.0f);
 
-			glTexCoord2f(0.25f, 0.0f); glVertex3f( 2.0f, -0.2f,  2.0f);
-			glTexCoord2f(0.25f, 0.25f); glVertex3f( 2.0f,  0.3f,  2.0f);
+				// Back Face
+				glNormal3f( 0.0f, 0.0f, -1.0f);
+				glTexCoord2f(0.75f, 0.0f); glVertex3f(-2.0f, -0.2f, -2.0f);
+				glTexCoord2f(0.75f, 0.25f); glVertex3f(-2.0f,  0.3f, -2.0f);
 
-			// Right face
-			glNormal3f( 1.0f, 0.0f, 0.0f);
-			glTexCoord2f(0.5f, 0.0f); glVertex3f( 2.0f, -0.2f, -2.0f);
-			glTexCoord2f(0.5f, 0.25f); glVertex3f( 2.0f,  0.3f, -2.0f);
+				// Left Face
+				glNormal3f( -1.0f, 0.0f, 0.0f);
+				glTexCoord2f(1.0f, 0.0f); glVertex3f(-2.0f, -0.2f,  2.0f);
+				glTexCoord2f(1.0f, 0.25f); glVertex3f(-2.0f,  0.3f,  2.0f);
 
-			// Back Face
-			glNormal3f( 0.0f, 0.0f, -1.0f);
-			glTexCoord2f(0.75f, 0.0f); glVertex3f(-2.0f, -0.2f, -2.0f);
-			glTexCoord2f(0.75f, 0.25f); glVertex3f(-2.0f,  0.3f, -2.0f);
+			glEnd();
 
-			// Left Face
-			glNormal3f( -1.0f, 0.0f, 0.0f);
-			glTexCoord2f(1.0f, 0.0f); glVertex3f(-2.0f, -0.2f,  2.0f);
-			glTexCoord2f(1.0f, 0.25f); glVertex3f(-2.0f,  0.3f,  2.0f);
+			glBegin(GL_QUAD_STRIP);
 
-		glEnd();
-
-		glBegin(GL_QUAD_STRIP);
-
-			// Top part
-			glNormal3f( 0.0f, 1.0f, 0.0f);
+				// Top part
+				glNormal3f( 0.0f, 1.0f, 0.0f);
 			
-			glTexCoord2f(0.0f, 0.0f); glVertex3f(-2.0f,  0.3f,  2.0f);
-			glTexCoord2f(0.0f, 0.25f); glVertex3f(-1.6f,  0.3f,  1.6f);
+				glTexCoord2f(0.0f, 0.0f); glVertex3f(-2.0f,  0.3f,  2.0f);
+				glTexCoord2f(0.0f, 0.25f); glVertex3f(-1.6f,  0.3f,  1.6f);
 
-			glTexCoord2f(0.25f, 0.0f); glVertex3f( 2.0f,  0.3f,  2.0f);
-			glTexCoord2f(0.25f, 0.25f); glVertex3f( 1.6f,  0.3f,  1.6f);
+				glTexCoord2f(0.25f, 0.0f); glVertex3f( 2.0f,  0.3f,  2.0f);
+				glTexCoord2f(0.25f, 0.25f); glVertex3f( 1.6f,  0.3f,  1.6f);
 
-			glTexCoord2f(0.5f, 0.0f); glVertex3f( 2.0f,  0.3f, -2.0f);
-			glTexCoord2f(0.5f, 0.25f); glVertex3f( 1.6f,  0.3f, -1.6f);
+				glTexCoord2f(0.5f, 0.0f); glVertex3f( 2.0f,  0.3f, -2.0f);
+				glTexCoord2f(0.5f, 0.25f); glVertex3f( 1.6f,  0.3f, -1.6f);
 
-			glTexCoord2f(0.75f, 0.0f); glVertex3f(-2.0f,  0.3f, -2.0f);
-			glTexCoord2f(0.75f, 0.25f); glVertex3f(-1.6f,  0.3f, -1.6f);
+				glTexCoord2f(0.75f, 0.0f); glVertex3f(-2.0f,  0.3f, -2.0f);
+				glTexCoord2f(0.75f, 0.25f); glVertex3f(-1.6f,  0.3f, -1.6f);
 
-			glTexCoord2f(1.0f, 0.0f); glVertex3f(-2.0f,  0.3f,  2.0f);
-			glTexCoord2f(1.0f, 0.25f); glVertex3f(-1.6f,  0.3f,  1.6f);
+				glTexCoord2f(1.0f, 0.0f); glVertex3f(-2.0f,  0.3f,  2.0f);
+				glTexCoord2f(1.0f, 0.25f); glVertex3f(-1.6f,  0.3f,  1.6f);
 
-		glEnd();
+			glEnd();
 
-		glBegin(GL_QUAD_STRIP);
+			glBegin(GL_QUAD_STRIP);
 
-			// Inside part
+				// Inside part
 
-			glNormal3f( 0.0f, 0.0f, -1.0f);
+				glNormal3f( 0.0f, 0.0f, -1.0f);
 
-			glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.6f,  0.3f,  1.6f);
-			glTexCoord2f(0.0f, 0.25f); glVertex3f(-1.6f,  0.1f,  1.6f);
+				glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.6f,  0.3f,  1.6f);
+				glTexCoord2f(0.0f, 0.25f); glVertex3f(-1.6f,  0.1f,  1.6f);
 
-			glTexCoord2f(0.25f, 0.0f); glVertex3f( 1.6f,  0.3f,  1.6f);
-			glTexCoord2f(0.25f, 0.25f); glVertex3f( 1.6f,  0.1f,  1.6f);
+				glTexCoord2f(0.25f, 0.0f); glVertex3f( 1.6f,  0.3f,  1.6f);
+				glTexCoord2f(0.25f, 0.25f); glVertex3f( 1.6f,  0.1f,  1.6f);
 
-			glNormal3f( -1.0f, 0.0f, 0.0f);
+				glNormal3f( -1.0f, 0.0f, 0.0f);
 
-			glTexCoord2f(0.5f, 0.0f); glVertex3f( 1.6f,  0.3f, -1.6f);
-			glTexCoord2f(0.5f, 0.25f); glVertex3f( 1.6f,  0.1f, -1.6f);
+				glTexCoord2f(0.5f, 0.0f); glVertex3f( 1.6f,  0.3f, -1.6f);
+				glTexCoord2f(0.5f, 0.25f); glVertex3f( 1.6f,  0.1f, -1.6f);
 
-			glNormal3f( 0.0f, 0.0f, 1.0f);
+				glNormal3f( 0.0f, 0.0f, 1.0f);
 
-			glTexCoord2f(0.75f, 0.0f); glVertex3f(-1.6f,  0.3f, -1.6f);
-			glTexCoord2f(0.75f, 0.25f); glVertex3f(-1.6f,  0.1f, -1.6f);
+				glTexCoord2f(0.75f, 0.0f); glVertex3f(-1.6f,  0.3f, -1.6f);
+				glTexCoord2f(0.75f, 0.25f); glVertex3f(-1.6f,  0.1f, -1.6f);
 
-			glNormal3f( 1.0f, 0.0f, 0.0f);
+				glNormal3f( 1.0f, 0.0f, 0.0f);
 
-			glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.6f,  0.3f,  1.6f);
-			glTexCoord2f(1.0f, 0.25f); glVertex3f(-1.6f,  0.1f,  1.6f);
+				glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.6f,  0.3f,  1.6f);
+				glTexCoord2f(1.0f, 0.25f); glVertex3f(-1.6f,  0.1f,  1.6f);
 
-		glEnd();
+			glEnd();
 
-		glBegin(GL_QUADS);
+			glBegin(GL_QUADS);
 
-			// Bottom Face
-			glNormal3f( 0.0f, -1.0f, 0.0f);
-			glTexCoord2f(0.0f, 0.0f); glVertex3f(-2.0f,  -0.2f, -2.0f);
-			glTexCoord2f(0.0f, 1.0f); glVertex3f(-2.0f,  -0.2f,  2.0f);
-			glTexCoord2f(0.25f, 1.0f); glVertex3f( 2.0f,  -0.2f,  2.0f);
-			glTexCoord2f(0.25f, 0.0f); glVertex3f( 2.0f,  -0.2f, -2.0f);
+				// Bottom Face
+				glNormal3f( 0.0f, -1.0f, 0.0f);
+				glTexCoord2f(0.0f, 0.0f); glVertex3f(-2.0f,  -0.2f, -2.0f);
+				glTexCoord2f(0.0f, 1.0f); glVertex3f(-2.0f,  -0.2f,  2.0f);
+				glTexCoord2f(0.25f, 1.0f); glVertex3f( 2.0f,  -0.2f,  2.0f);
+				glTexCoord2f(0.25f, 0.0f); glVertex3f( 2.0f,  -0.2f, -2.0f);
 
-		glEnd();
+			glEnd();
 
-	glEndList();
-
-
-	checker_board_top = checker_board_rest + 1;
-
-	glNewList(checker_board_top,GL_COMPILE);
-
-		glBegin(GL_QUADS);
-
-			// Top Face
-			glNormal3f( 0.0f, 1.0f, 0.0f);
-			glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.6f,  0.11f, -1.6f);
-			glTexCoord2f(0.0f, 0.703f); glVertex3f(-1.6f,  0.11f,  1.6f);
-			glTexCoord2f(0.703f, 0.703f); glVertex3f( 1.6f,  0.11f,  1.6f);
-			glTexCoord2f(0.703f, 0.0f); glVertex3f( 1.6f,  0.11f, -1.6f);
-
-		glEnd();
-
-	glEndList();
+		glEndList();
 
 
-	checker_piece_rest = checker_board_top + 1;
+		checker_board_top = checker_board_rest + 1;
 
-	glNewList(checker_piece_rest,GL_COMPILE);
+		glNewList(checker_board_top,GL_COMPILE);
 
-		glBegin(GL_QUAD_STRIP); // Around the edge
+			glBegin(GL_QUADS);
 
-			for(int i = 0; i <= 360; i+=40)
-			{
-				float s = sin(3.141592654*(double)i/180.0), c = cos(3.141592654*(double)i/180.0);
-				glNormal3f(s,0.0f,c);
+				// Top Face
+				glNormal3f( 0.0f, 1.0f, 0.0f);
+				glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.6f,  0.11f, -1.6f);
+				glTexCoord2f(0.0f, 0.703f); glVertex3f(-1.6f,  0.11f,  1.6f);
+				glTexCoord2f(0.703f, 0.703f); glVertex3f( 1.6f,  0.11f,  1.6f);
+				glTexCoord2f(0.703f, 0.0f); glVertex3f( 1.6f,  0.11f, -1.6f);
 
-				glTexCoord2f((float)i/360.0f, 1.0f); glVertex3f(-0.13f*c, -0.04f, 0.13f*s);
-				glTexCoord2f((float)i/360.0f, 0.0f); glVertex3f(-0.13f*c,  0.04f, 0.13f*s);
-			}
+			glEnd();
 
-		glEnd();
+		glEndList();
 
-		glBegin(GL_QUAD_STRIP); // Top rim
+
+		checker_piece_rest = checker_board_top + 1;
+
+		glNewList(checker_piece_rest,GL_COMPILE);
+
+			glBegin(GL_QUAD_STRIP); // Around the edge
+
+				for(int i = 0; i <= 360; i+=40)
+				{
+					float s = sin(3.141592654*(double)i/180.0), c = cos(3.141592654*(double)i/180.0);
+					glNormal3f(s,0.0f,c);
+
+					glTexCoord2f((float)i/360.0f, 1.0f); glVertex3f(-0.13f*c, -0.04f, 0.13f*s);
+					glTexCoord2f((float)i/360.0f, 0.0f); glVertex3f(-0.13f*c,  0.04f, 0.13f*s);
+				}
+
+			glEnd();
+
+			glBegin(GL_QUAD_STRIP); // Top rim
 
 				glNormal3f(0.0f,1.0f,0.0f);
 

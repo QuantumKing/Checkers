@@ -14,6 +14,10 @@ class c3DWindow
 
 		int flags, bpp;
 
+		GLfloat LightAmbient[4];
+		GLfloat LightDiffuse[4];
+		GLfloat LightPosition[4];
+
 	public:
 
 		c3DWindow(int W, int H, int ScreenFlags, int ScreenBPP);
@@ -26,5 +30,7 @@ class c3DWindow
 
 		void resize (int W, int H);
 
-		void toggle_fullscreen (void);	
+		void toggle_fullscreen (void);
+
+		void init_gl (void);
 };
