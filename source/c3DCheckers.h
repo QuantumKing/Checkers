@@ -5,7 +5,7 @@
 #include "c3DCheckerPiece.h"
 
 #include "cBoard.h"
-
+#include "checker_ai.h"
 
 class c3DCheckers : public c3DWindow
 {
@@ -22,6 +22,13 @@ class c3DCheckers : public c3DWindow
 		int current_piece_moving_direction, current_piece_moving_steps;
 		bool current_piece_moving;
 
+		bool player_turn;
+
+		int move_count;
+		MoveSet opponent_moves;
+
+		bool ai;
+
 		cBoard *board;
 
 		bool done;
@@ -30,12 +37,14 @@ class c3DCheckers : public c3DWindow
 
 		bool mmb_down, lmb_down;
 
-		float z, roll, pitch, heading;
+		float z, pitch, heading;
 
 
 		void move_piece (int i, int j, int d, int n);	///  d is the direction of the move: 0 = top left, 1 = top right, 2 = bottom left, 3 = bottom right. 
 								///  n represents how many steps. i,j represents the coordinate to be moved.
 		Vector3D GetOGLPos(int x, int y) const;
+
+		void select_piece_at(Vector3D& v);
 
 
 	public:

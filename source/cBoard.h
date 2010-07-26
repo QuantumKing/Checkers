@@ -1,3 +1,5 @@
+#ifndef CBOARD_H
+#define CBOARD_H
 
 class cBoard
 {
@@ -6,7 +8,11 @@ class cBoard
 
 		bool first;
 
-		bool red_turn;
+		bool forced_jump;
+
+		int forced_jump_i, forced_jump_j;
+
+		int n_types[4];
 
 	public:
 
@@ -18,9 +24,26 @@ class cBoard
 		const int at (const int i, const int j) const;
 
 		
-		void possible_moves (int i, int j, int moves[4]) const;
+		bool possible_moves (int i, int j, int moves[4]);	/// i,j represents the coordinate to be moved (maybe). 
+									/// the moves are stored in moves (moves[i] represents n steps in direction ).
+									/// returns true if there are ANY moves.
 
-		void new_turn (void);
+		bool new_turn (void);
+
+		int color_at (int i, int j) const;
+
+		
+		bool check_can_jump (int i, int j) const;		/// checks if the current piece must make a jump.
+
+		bool check_forced_jump (int color) const;		/// checks if any piece of a certain color must make a jump.
+									/// a color of 1 means red, a color of 2 means black.
+
+		int at_direction_steps (int i, int j, int d, int n) const;	/// Gets the piece when taking n steps from i,j in direction d.
+
+
+		int number_of_type (int type) const;			/// Returns the number of pieces of a certain type: 1->red man, 2->black man, 3->red king, 4->black king.
 		
 
 };
+
+#endif
