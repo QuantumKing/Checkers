@@ -12,8 +12,6 @@ MoveSet best_moves, possible_moves;
 vector<int> nodes, dummy[MAX_DEPTH-1];
 
 
-//int analyse_board (cBoard board
-
 void recurse_better_move_ai (int depth, int num_moves, cBoard board, int color, int pos_i, int pos_j, MoveSet move_set, int& score);
 
 bool better_move_ai (cBoard *board, int color, MoveSet *move_set, int score);
@@ -110,7 +108,12 @@ bool better_move_ai (cBoard *board, int color, MoveSet *move_set)
 					count = 0;
 					recurse_better_move_ai (0, 1, *board, color, i, j, m, score);
 
-					cout << count << endl;
+					if(nodes.size() <= 0)
+					{
+						*move_set = m;
+						return true;
+					}
+
 					int min = nodes[0];
 					for(unsigned int i = 0; i < nodes.size(); ++i)
 					{
@@ -133,7 +136,7 @@ bool better_move_ai (cBoard *board, int color, MoveSet *move_set)
 		}
 	}
 
-	std::cout << std::endl;
+	//std::cout << std::endl;
 	*move_set = best_moves;
 
 	return found_move;
@@ -154,17 +157,17 @@ void sum_move_score (int depth, cBoard *board, int color, int score)
 			if(!board->possible_moves(i,j,moves))
 				continue;
 	
-			MoveSet m(i,j);
+			MoveSet M(i,j);
 
 			for(int k = 0; k < 4; ++k)
 			{
 				if( moves[k] > 0 )
 				{
-					m.add_move(k,moves[k]);
+					M.add_move(k,moves[k]);
 
 					int s = score;
 
-					recurse_better_move_ai (depth, 1, *board, color, i, j, m, s);
+					recurse_better_move_ai (depth, 1, *board, color, i, j, M, s);
 
 					if( depth == MAX_DEPTH )
 					{
@@ -172,23 +175,27 @@ void sum_move_score (int depth, cBoard *board, int color, int score)
 					}
 					else
 					{
-						int j = MAX_DEPTH-depth-1;
-						int m = dummy[j][0];
-						for(unsigned int i = 0; i < dummy[j].size(); ++i)
+						int j = MAX_DEPTH-depth-1, m;
+						if( dummy[j].size() > 0 )
 						{
-							if( j % 2 == 0 )
+							m = dummy[j][0];
+							for(unsigned int i = 0; i < dummy[j].size(); ++i)
 							{
-								if( dummy[j][i] > m )
-									m = dummy[j][i];
+								if( j % 2 == 0 )
+								{
+									if( dummy[j][i] > m )
+										m = dummy[j][i];
+								}
+								else
+								{
+									if( dummy[j][i] < m )
+										m = dummy[j][i];
+								}
 							}
-							else
-							{
-								if( dummy[j][i] < m )
-									m = dummy[j][i];
-							}							
-							//cout << dummy2[i] << " ";
 						}
-						//cout << endl;
+						else if( j % 2 == 0 ) m = -50;
+						else m = 50;
+
 						if( depth == 1 )
 							nodes.push_back(m);
 						else
@@ -197,7 +204,7 @@ void sum_move_score (int depth, cBoard *board, int color, int score)
 						dummy[j].clear();
 					}
 
-					m.pop_move();
+					M.pop_move();
 				}
 			}
 		}

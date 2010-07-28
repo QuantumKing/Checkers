@@ -11,6 +11,8 @@ c3DCheckers::c3DCheckers(int W, int H, int ScreenFlags, int ScreenBPP) : c3DWind
 { 
 	SDL_Init(SDL_INIT_TIMER);
 
+	SDL_WM_SetCaption("Checkers", NULL);
+
 	current_time = 0.0f;
 	last_time = 0.0f;
 	delta_time = 0.0f;
