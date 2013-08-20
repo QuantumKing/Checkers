@@ -1,5 +1,7 @@
 You'll need SDL-1.2, OpenGL and GLU to compile.
 
+Pressing 'a' turns on the AI.
+
 Rolling the middle mouse button zooms in.
 
 Holding the middle mouse button down while moving the mouse around tilts the checker board.
